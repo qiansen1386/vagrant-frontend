@@ -13,19 +13,19 @@
 # https://github.com/laravel/homestead
 
 settings = {
-  vagrantfile_version:"2",  # To specifiy this config file is compliant Vagrant v2
-  box:"ubuntu/trusty64"     # Base Box (Image in Docker)
-  memory: "512",            # Change Memory
-  cpus: "1",                # Change CPU
-  name:'frontend-dev-env',  # Change it if you want
-  ip:'127.0.0.1',
-  port:{
+  vagrantfile_version: '2',  # To specifiy this config file is compliant Vagrant v2
+  box: 'ubuntu/trusty64',    # Base Box (Image in Docker)
+  memory: '512',            # Change Memory
+  cpus: '1',                # Change CPU
+  name: 'frontend-dev-env',  # Change it if you want
+  ip: '127.0.0.1',
+  port: {
     8080 => 8080, # webpack-dev-server
     9090 => 9090, # webpack backend server
     1337 => 1337  # Node Server
     # The vagrant will automatically add 22 => 2222 for the ssh. Override it if you want.
   },
-  synced_folder:{
+  synced_folder: {
     # Note: The shared folder guest path must be absolute. Work even for windows, tested on Windows 7.
     './' => '/home/vagrant/frontend-dev-env'
   }
@@ -76,7 +76,7 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
   # comment out the line below to disallow the system to upgrade
   apt-get upgrade -y && apt-get dist-upgrade -y
 
-  printf "Installing a few necessary packages..."  
+  printf "Installing a few necessary packages..."
   sudo apt-get update # reload the local package database
   sudo apt-get install -y git nodejs npm build-essential libssl-dev
 
@@ -90,7 +90,7 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
 
   printf  "Install all missing packages based on package.json"
   # That is right, make sure you have a package.json file in your dev folder, specifying all the npm packages you need.
-  sudo npm install 
+  sudo npm install
   SHELL
 
 end
