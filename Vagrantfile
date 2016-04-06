@@ -31,7 +31,7 @@ settings = {
   }
 }
 
-Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
+Vagrant.configure(settings[:vagrantfile_version] ||= "2") do |config|
   # SEE MORE @ https://docs.vagrantup.com.
 
   # Prevent TTY Errors
@@ -68,6 +68,10 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
     # vb.gui = true
   end
 
+  # uncomment following line to install zsh
+  #config.vm.provision :shell, path: "./zsh.install.sh"
+
+  # Main provisioner  
   config.vm.provision "shell", inline: <<-SHELL
   #!/bin/bash
 
@@ -101,8 +105,5 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
   printf "Run webpack-dev-server"
   webpack-dev-server
   SHELL
-
-  # uncomment following line to install zsh
-  #config.vm.provision :shell, path: "./zsh.install.sh"
 
 end
