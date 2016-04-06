@@ -1,3 +1,4 @@
+#!/bin/bash
 # Install Zsh
 sudo apt-get install -y zsh
 # Install Oh-my-zsh
