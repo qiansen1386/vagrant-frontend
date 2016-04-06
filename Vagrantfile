@@ -92,14 +92,17 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
   nvm use 4.4.2
   printf  "Update npm from 2.15.0 to ^3.8.5"
   sudo npm update -g npm
-
+  
+  # Install npm packages
   cd #{settings[:synced_folder].values[0]}
-
   printf  "Install all missing packages based on package.json"
   # That is right, make sure you have a package.json file in your dev folder, specifying all the npm packages you need.
   sudo npm install
-
+  printf "Run webpack-dev-server"
   webpack-dev-server
   SHELL
+
+  # uncomment following line to install zsh
+  #config.vm.provision :shell, path: "./zsh.install.sh"
 
 end
