@@ -15,8 +15,8 @@
 settings = {
   vagrantfile_version: '2',  # To specifiy this config file is compliant Vagrant v2
   box: 'ubuntu/trusty64',    # Base Box (Image in Docker)
-  memory: '512',            # Change Memory
-  cpus: '1',                # Change CPU
+  memory: '512',             # Change Memory
+  cpus: '1',                 # Change CPU
   name: 'frontend-dev-env',  # Change it if you want
   ip: '127.0.0.1',
   port: {
@@ -34,13 +34,15 @@ settings = {
 Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
   # SEE MORE @ https://docs.vagrantup.com.
 
+  # Prevent TTY Errors
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
   # Default Official Ubuntu Server 14.04 LTS (Trusty Tahr) builds => Most pupular vagrant box
-  config.vm.box = settings[:box]||="ubuntu/trusty64"
+  config.vm.box = settings[:box] ||= "ubuntu/trusty64"
 
   # Create a forwarded port mapping which allows access to a specific port
   settings[:port].each {|key, value|
-    puts "Port #{key} forward to #{value}"
-    config.vm.network :forwarded_port, guest: key, host: value
+    config.vm.network :forwarded_port, guest: key, host: value, auto_correct: true
   }
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -51,13 +53,14 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   settings[:synced_folder].each { |key, value|
-    puts "Sync Folder #{key} map to #{value}."
     config.vm.synced_folder key, value
   }
 
   config.vm.provider "virtualbox" do |vb|
     vb.name = settings[:name] ||= "frontend-dev-env"
     vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
+    # Enable Symlink SEE MORE @http://perrymitchell.net/article/npm-symlinks-through-vagrant-windows/
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     # Customize the amount of memory on the VM:
     vb.memory = settings[:memory]
     vb.cpus= settings[:cpus]
@@ -71,26 +74,32 @@ Vagrant.configure(settings[:vagrantfile_version]||="2") do |config|
   printf "Running Vagrant Provisioning..."
 
   printf "Updating Box..."
-  apt-get update  # make sure the box is fully up to date
+  sudo apt-get update --fix-missing # make sure the box is fully up to date
 
-  # comment out the line below to disallow the system to upgrade
-  apt-get upgrade -y && apt-get dist-upgrade -y
+  # uncomment the following line to allow the system upgrade
+  # sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y
 
   printf "Installing a few necessary packages..."
-  sudo apt-get update # reload the local package database
   sudo apt-get install -y git nodejs npm build-essential libssl-dev
 
-  printf  "Install Node Version Manager"
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+  # printf  "Install Node Version Manager"
+  wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | sh
+  export NVM_DIR="$HOME/.nvm"
+  . ~/.nvm/nvm.sh
 
-  printf  "Install & use Node 4.4.2 LTS"
-  nvm run 4.4.2 --version
-  printf  "Update npm"
-  sudo npm update -g
+  # printf  "Install & use Node 4.4.2 LTS"
+  nvm install 4.4.2 --version
+  nvm use 4.4.2
+  printf  "Update npm from 2.15.0 to ^3.8.5"
+  sudo npm update -g npm
+
+  cd #{settings[:synced_folder].values[0]}
 
   printf  "Install all missing packages based on package.json"
   # That is right, make sure you have a package.json file in your dev folder, specifying all the npm packages you need.
   sudo npm install
+
+  webpack-dev-server
   SHELL
 
 end
