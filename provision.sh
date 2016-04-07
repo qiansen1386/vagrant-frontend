@@ -19,8 +19,8 @@
   echo "Install & use Node 4.4.2 LTS"
   nvm install 4.4.2 --version
   nvm use 4.4.2
-  echo "Update npm from 2.15.0 to ^3.8.5"
-  sudo npm update -g npm
+  echo "Update npm from 1.*.*/2.*.* to ^3.8.5"
+  npm update -g npm
   # Install npm packages
   cd $PROJECT_DIR
   echo  "Install all missing packages based on package.json"
