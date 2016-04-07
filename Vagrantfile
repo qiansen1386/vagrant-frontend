@@ -48,10 +48,8 @@ Vagrant.configure(settings[:vagrantfile_version] ||= "2") do |config|
   # using a specific IP.
   config.vm.network "private_network", ip: settings[:ip] ||= "127.0.0.1"
 
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
+  # Share an additional folder to the guest VM.
+  # smb is windows only, and nfs do not work on windows.
   settings[:synced_folder].each { |key, value|
     config.vm.synced_folder key, value
   }
@@ -59,7 +57,7 @@ Vagrant.configure(settings[:vagrantfile_version] ||= "2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.name = settings[:name] ||= "frontend-dev-env"
     vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
-    # Enable Symlink SEE MORE @http://perrymitchell.net/article/npm-symlinks-through-vagrant-windows/
+    # # Enable Symlink SEE MORE @http://perrymitchell.net/article/npm-symlinks-through-vagrant-windows/
     vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     # Customize the amount of memory on the VM:
     vb.memory = settings[:memory]
@@ -68,42 +66,14 @@ Vagrant.configure(settings[:vagrantfile_version] ||= "2") do |config|
     # vb.gui = true
   end
 
+  config.vm.provision "shell", inline:<<-SHELL
+  sudo apt-get install -y git
+SHELL
+
   # uncomment following line to install zsh
-  #config.vm.provision :shell, path: "./zsh.install.sh"
+  # config.vm.provision "shell", path: "./zsh.install.sh"
 
-  # Main provisioner  
-  config.vm.provision "shell", inline: <<-SHELL
-  #!/bin/bash
-
-  printf "Running Vagrant Provisioning..."
-
-  printf "Updating Box..."
-  sudo apt-get update --fix-missing # make sure the box is fully up to date
-
-  # uncomment the following line to allow the system upgrade
-  # sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y
-
-  printf "Installing a few necessary packages..."
-  sudo apt-get install -y git nodejs npm build-essential libssl-dev
-
-  # printf  "Install Node Version Manager"
-  wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | sh
-  export NVM_DIR="$HOME/.nvm"
-  . ~/.nvm/nvm.sh
-
-  # printf  "Install & use Node 4.4.2 LTS"
-  nvm install 4.4.2 --version
-  nvm use 4.4.2
-  printf  "Update npm from 2.15.0 to ^3.8.5"
-  sudo npm update -g npm
-  
-  # Install npm packages
-  cd #{settings[:synced_folder].values[0]}
-  printf  "Install all missing packages based on package.json"
-  # That is right, make sure you have a package.json file in your dev folder, specifying all the npm packages you need.
-  sudo npm install
-  printf "Run webpack-dev-server"
-  webpack-dev-server
-  SHELL
+  # Main provisioner
+  config.vm.provision "shell", path: "./provision.sh", args: settings[:synced_folder].values[0]
 
 end
