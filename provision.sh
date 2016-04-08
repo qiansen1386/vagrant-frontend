@@ -14,8 +14,9 @@
   sudo apt-get install -y nodejs npm build-essential libssl-dev
   echo  "Install Node Version Manager"
   wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | sh
+  registerNVM="export NVM_DIR="$HOME/.nvm""
+  echo $registerNVM >> ~/.profile
   source ~/.profile # Refresh PATH
-  export NVM_DIR="$HOME/.nvm"
   echo "Install & use Node 4.4.2 LTS"
   NODEVERSION=4.4.2
   nvm install $NODEVERSION --version
