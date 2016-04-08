@@ -1,4 +1,4 @@
- #!/bin/zsh
+ #!/bin/bash
   echo "Running Vagrant Provisioning..."
   # Create symlink to /tmp/node_modules instead of saving it in project folder right away
   PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
