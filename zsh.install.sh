@@ -3,9 +3,9 @@
 sudo apt-get install -y zsh
 # Install Oh-my-zsh
 wget --no-check-certificate https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
-# change sh
+# Change default shell to zsh
 sudo chsh -s /bin/zsh vagrant
-# copy .zshrc
+# Use default template for .zshrc settings
 sudo cp /home/vagrant/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 # Configuration
 # Run those lines on your local PC, LOL.
