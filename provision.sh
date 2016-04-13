@@ -16,7 +16,7 @@
  # Install npm packages
  echo  "Install all missing packages based on package.json"
  # That is right, make sure you have a package.json file in your dev folder, specifying all the npm packages you need.
- sudo npm install --no-bin-links
- sudo npm i -g webpack webpack-dev-server
+ npm install --no-bin-links
+ npm i -g webpack webpack-dev-server
  echo "Run webpack-dev-server"
  webpack-dev-server
