@@ -28,7 +28,7 @@ Bug Report
 
 I believe my code and comments are straight-forward enough. Check with [Stack Overflow](http://stackoverflow.com/questions/tagged/vagrant) or [Official Doc](https://www.vagrantup.com/docs/) if needed.
 
-If you spot any bugs, a new issue tickets is very very welcome. 
+If you spot any bugs, a new issue tickets is very very welcome.
 However please don't directly throw me enquires, as I may not answer u correctly.
 Have fun~
 
@@ -38,3 +38,4 @@ This project has referenced many popular vagrant configurations, including:
 
 * https://github.com/drmyersii/vagrant-node-env
 * https://github.com/laravel/homestead
+* https://github.com/robertkowalski/vagrant-nvm

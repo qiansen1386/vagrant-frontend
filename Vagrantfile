@@ -67,7 +67,7 @@ Vagrant.configure(settings[:vagrantfile_version] ||= "2") do |config|
   end
 
   config.vm.provision "shell", inline:<<-SHELL
-  sudo apt-get install -y git
+  sudo apt-get install -y git-core
 SHELL
 
   # uncomment following line to install zsh
