@@ -10,10 +10,10 @@
   echo "Installing a few necessary packages..."
   sudo apt-get install -y build-essential libssl-dev
   echo  "Install Node Version Manager"
-  wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | sh
+  wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
   registerNVM="export NVM_DIR="$HOME/.nvm""
-  echo $registerNVM >> ~/.profile
-  source ~/.profile # Refresh PATH
+  echo $registerNVM >> $HOME/.bashrc
+  source $HOME/.bashrc # Refresh PATH
   echo "Install & use Node 4.4.2 LTS"
   NODEVERSION=4.4.2
   nvm install $NODEVERSION
@@ -25,5 +25,6 @@
   echo  "Install all missing packages based on package.json"
   # That is right, make sure you have a package.json file in your dev folder, specifying all the npm packages you need.
   sudo npm install --no-bin-links
+  sudo npm i -g webpack webpack-dev-server
   echo "Run webpack-dev-server"
   webpack-dev-server
