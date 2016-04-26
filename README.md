@@ -1,6 +1,10 @@
 vagrant-frontend
 ===============
 
+> ### NOTE: Deprecated!!
+After trying so many solutions, I think none of the approaches are ideal, details explained @ [Frontend Learning Note 3 - Vagrant, VM & Shell](http://qiansen1386.github.io/post/2016/04/frontend-learning-note-3/).
+Right now I am looking for the possibilities of directly coding inside the virtual machine. May have drawbacks also, but certainly feasible. The story on this new topic may be listed in episode 4/5 of this series. (The No.4 is already planed and half way done.)
+
 A minimal vagrant file for front end development
 
 Support: Windows 7 + virtualbox
